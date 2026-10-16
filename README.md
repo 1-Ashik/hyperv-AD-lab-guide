@@ -67,7 +67,9 @@ This guide rebuilds a complete Hyper-V learning lab from a blank Windows 11 Home
 
 The whole lab runs on one 16 GB laptop: VirtualBox hosts a Windows Server 2025 VM called HYPERVLAB, and Hyper-V inside HYPERVLAB hosts three small lab VMs on an isolated 10.20.20.0/24 network.
 
-![Lab architecture — three layers, three switches, three VMs](images/lab-architecture.png)
+![Lab architecture — three layers, three switches, three VMs](https://mermaid.ink/img/eyJjb2RlIjogImZsb3djaGFydCBUQlxuICBzdWJncmFwaCBIT1NUW1wiTGFwdG9wIFx1MjAxNCBXaW5kb3dzIDExIEhvbWUsIDE2IEdCIChIT1NUKVwiXVxuICAgIHN1YmdyYXBoIFZCW1wiVmlydHVhbEJveCBcdTIwMTQgVk0gV2luU2VydmVyMjAyNSBpbiBDOlxcXFxWTXMgXHUwMGI3IDYgR0IgXHUwMGI3IDQgQ1BVcyBcdTAwYjcgbmVzdGVkIFZULXggXHUwMGI3IHBhcmF2aXJ0IE5vbmVcIl1cbiAgICAgIHN1YmdyYXBoIEhWW1wiSFlQRVJWTEFCIFx1MjAxNCBXaW5kb3dzIFNlcnZlciAyMDI1ICsgSHlwZXItViByb2xlIFx1MDBiNyAxMC4yMC4yMC4xXCJdXG4gICAgICAgIEVYVFtcImxhYi1leHRlcm5hbCAoRXh0ZXJuYWwgc3dpdGNoKTxici8-VmlydHVhbEJveCBOQVQgXHUyMTkyIGludGVybmV0XCJdXG4gICAgICAgIElOVFtcImxhYi1pbnRlcm5hbCAoSW50ZXJuYWwgc3dpdGNoKTxici8-MTAuMjAuMjAuMC8yNFwiXVxuICAgICAgICBQUlZbXCJsYWItcHJpdmF0ZSAoUHJpdmF0ZSBzd2l0Y2gpPGJyLz5WTXMgb25seSBcdTAwYjcgVGVzdCBDXCJdXG4gICAgICAgIEMxW1wiV1MtQ09SRTAxIFx1MDBiNyAxMC4yMC4yMC4yMDxici8-U2VydmVyIENvcmUgXHUwMGI3IEdlbiAyIFx1MDBiNyA0MCBHQjxici8-REMgKyBETlMgZm9yIGxhYi5sb2NhbFwiXVxuICAgICAgICBDMltcIldTLUNPUkUwMiBcdTAwYjcgMTAuMjAuMjAuMzA8YnIvPlNlcnZlciBDb3JlIGNsb25lIGZyb20gdGVtcGxhdGU8YnIvPm1lbWJlciBzZXJ2ZXIsIFNlcnZlcnMgT1VcIl1cbiAgICAgICAgVTFbXCJVQlUwMSBcdTAwYjcgMTAuMjAuMjAuMTA8YnIvPlVidW50dSBTZXJ2ZXIgXHUwMGI3IDEuNSBHQiBcdTAwYjcgMjAgR0JcIl1cbiAgICAgICAgSU5UIC0tLSBDMVxuICAgICAgICBJTlQgLS0tIEMyXG4gICAgICAgIElOVCAtLS0gVTFcbiAgICAgIGVuZFxuICAgIGVuZFxuICBlbmRcbiAgc3R5bGUgSU5UIGZpbGw6I2RmZjNlMyxzdHJva2U6IzJlOGI1N1xuICBzdHlsZSBFWFQgZmlsbDojZmZmNmQ2LHN0cm9rZTojZDRhMTA2XG4gIHN0eWxlIFBSViBmaWxsOiNmYmUwZTIsc3Ryb2tlOiNjMDQ4NGYiLCAibWVybWFpZCI6IHsidGhlbWUiOiAiZGVmYXVsdCJ9fQ==?type=png&bgColor=white)
+
+<sub>Diagram drawn live from Mermaid by mermaid.ink. If it ever fails to load, the same diagram is in <code>images/lab-architecture.png</code>.</sub>
 
 Only `lab-internal` carries day-to-day traffic. `lab-external` exists for internet access during builds, and `lab-private` is only used to demonstrate full isolation. Because HYPERVLAB has 6 GB, memory is tight: UBU01 runs alone, and once the domain exists (Part 12 onwards) WS-CORE01 at 1280 MB plus WS-CORE02 at 768 MB is the most that fits.
 
@@ -1725,4 +1727,3 @@ Parts 1–11 cover what a support, systems or junior infrastructure role expects
 - Join UBU01 to the domain
 
 Known constraints going in: HYPERVLAB has 6 GB, so a second nested host (2 GB) plus a tiny VM inside it (1 GB) is the whole budget — UBU01 stays off. Clustering also needs the DC running (1280 MB), which this budget does not cover, so expect Replica hands-on and full clustering mostly as theory unless more memory is found. VirtualBox's nested virtualisation on this CPU is stable only with the affinity launcher; if Phase 9 pushes it over, the fallback is VMware Workstation Pro (free for personal use), converting the existing VDI rather than rebuilding.
-
