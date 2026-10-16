@@ -67,32 +67,48 @@ This guide rebuilds a complete Hyper-V learning lab from a blank Windows 11 Home
 
 The whole lab runs on one 16 GB laptop: VirtualBox hosts a Windows Server 2025 VM called HYPERVLAB, and Hyper-V inside HYPERVLAB hosts three small lab VMs on an isolated 10.20.20.0/24 network.
 
-![Lab architecture — three layers, three switches, three VMs](images/lab-architecture.png)
-
-<details>
-<summary>View as a live Mermaid chart (renders on the GitHub website)</summary>
-
 ```mermaid
+%%{init: {'theme':'base','themeVariables':{'fontSize':'14px','primaryTextColor':'#1f2d3d','lineColor':'#8a94a3','clusterBkg':'#ffffff','clusterBorder':'#8a94a3'},'flowchart':{'wrappingWidth':1200,'nodeSpacing':28,'rankSpacing':10,'padding':10,'htmlLabels':true}}}%%
 flowchart TB
-  subgraph HOST["Laptop — Windows 11 Home, 16 GB (HOST)"]
-    subgraph VB["VirtualBox — VM WinServer2025 in C:\\VMs · 6 GB · 4 CPUs · nested VT-x on · paravirt None"]
-      subgraph HV["HYPERVLAB — Windows Server 2025 + Hyper-V role · 10.20.20.1"]
-        EXT["lab-external (External switch)<br/>VirtualBox NAT → internet"]
-        INT["lab-internal (Internal switch)<br/>10.20.20.0/24"]
-        PRV["lab-private (Private switch)<br/>VMs only · Test C"]
-        C1["WS-CORE01 · 10.20.20.20<br/>Server Core · Gen 2 · 40 GB<br/>DC + DNS for lab.local"]
-        C2["WS-CORE02 · 10.20.20.30<br/>Server Core clone from template<br/>member server, Servers OU"]
-        U1["UBU01 · 10.20.20.10<br/>Ubuntu Server · 1.5 GB · 20 GB"]
-        INT --- C1
-        INT --- C2
-        INT --- U1
+  subgraph HOST["HOST — laptop, 16 GB"]
+    direction TB
+    subgraph VB["VirtualBox VM"]
+      direction TB
+      subgraph HV["HYPERVLAB"]
+        direction TB
+        SPEC["<b>HOST</b> Dell Inspiron 16 5630 · Windows 11 Home · 16 GB · Memory Integrity off · hypervisorlaunchtype off<br/><b>VirtualBox VM WinServer2025</b> in C:\VMs · 6 GB · 4 vCPU · EFI · Paravirt None · Nested VT-x on · 60 + 80 GB VDI · start /affinity FF<br/><b>HYPERVLAB</b> Windows Server 2025 Standard (Desktop Experience) + Hyper-V role · C: OS + C:\ISOs · L: VMs, Templates, Scripts · vEthernet(lab-internal) 10.20.20.1"]
+        EXT["<b>lab-external (External switch)</b><br/>Bound to the VM's NIC → VirtualBox NAT 10.0.2.x → internet. Used for downloads and activation only."]
+        subgraph INT["lab-internal 10.20.20.0/24"]
+          direction LR
+          U1["<b>UBU01 · 10.20.20.10</b><br/>Ubuntu Server 26.04.1<br/>Gen 2 · 1.5 GB · 20 GB disk<br/>user wick · OpenSSH<br/>Secure Boot: MS UEFI CA"]
+          C1["<b>WS-CORE01 · 10.20.20.20</b><br/>Windows Server 2025 Core<br/>Gen 2 · 1 GB (2 GB install) · 40 GB<br/>+ data01.vhdx 20 GB as E:<br/>DC for lab.local from Part 12"]
+          C2["<b>WS-CORE02 · 10.20.20.30</b><br/>Windows Server 2025 Core<br/>Gen 2 · 1 GB · differencing<br/>clone from template vhdx<br/>made by New-LabVM.ps1"]
+          U1 ~~~ C1 ~~~ C2
+        end
+        PRV["<b>lab-private (Private switch)</b> — VMs only, HYPERVLAB has no port<br/>Used in connectivity Test C; VMs are moved back to lab-internal afterwards."]
+        SPEC ~~~ EXT
+        EXT ~~~ INT
+        INT ~~~ PRV
       end
     end
   end
-  style INT fill:#dff3e3,stroke:#2e8b57
-  style EXT fill:#fff6d6,stroke:#d4a106
-  style PRV fill:#fbe0e2,stroke:#c0484f
+  classDef box fill:#ffffff,stroke:#8a94a3,stroke-width:1.5px,text-align:left
+  classDef spec fill:#eef2f7,stroke:#eef2f7,color:#4a5968,text-align:left
+  class EXT,PRV,U1,C1,C2 box
+  class SPEC spec
+  style HOST fill:#ffffff,stroke:#8a94a3,stroke-width:1.5px
+  style VB fill:#ffffff,stroke:#8a94a3,stroke-width:1.5px
+  style HV fill:#eef2f7,stroke:#8a94a3,stroke-width:1.5px
+  style INT fill:#dbe6f3,stroke:#2f6fb5,stroke-width:2px
 ```
+
+<details>
+<summary>Original diagram as an image (use this in the GitHub mobile app, which does not draw Mermaid charts)</summary>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/lab-architecture-dark.png">
+  <img alt="Lab architecture — three layers, three switches, three VMs" src="images/lab-architecture.png">
+</picture>
 
 </details>
 
