@@ -67,6 +67,14 @@ This guide rebuilds a complete Hyper-V learning lab from a blank Windows 11 Home
 
 The whole lab runs on one 16 GB laptop: VirtualBox hosts a Windows Server 2025 VM called HYPERVLAB, and Hyper-V inside HYPERVLAB hosts three small lab VMs on an isolated 10.20.20.0/24 network.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/lab-architecture-dark.png">
+  <img alt="Lab architecture — three layers, three switches, three VMs" src="images/lab-architecture.png">
+</picture>
+
+<details>
+<summary>View as a live Mermaid chart (GitHub website)</summary>
+
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontSize':'14px','primaryTextColor':'#1f2d3d','lineColor':'#8a94a3','clusterBkg':'#ffffff','clusterBorder':'#8a94a3'},'flowchart':{'wrappingWidth':1200,'nodeSpacing':28,'rankSpacing':10,'padding':10,'htmlLabels':true}}}%%
 flowchart TB
@@ -101,14 +109,6 @@ flowchart TB
   style HV fill:#eef2f7,stroke:#8a94a3,stroke-width:1.5px
   style INT fill:#dbe6f3,stroke:#2f6fb5,stroke-width:2px
 ```
-
-<details>
-<summary>Original diagram as an image (use this in the GitHub mobile app, which does not draw Mermaid charts)</summary>
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/lab-architecture-dark.png">
-  <img alt="Lab architecture — three layers, three switches, three VMs" src="images/lab-architecture.png">
-</picture>
 
 </details>
 
