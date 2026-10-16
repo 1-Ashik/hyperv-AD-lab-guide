@@ -69,6 +69,33 @@ The whole lab runs on one 16 GB laptop: VirtualBox hosts a Windows Server 2025 V
 
 ![Lab architecture — three layers, three switches, three VMs](images/lab-architecture.png)
 
+<details>
+<summary>View as a live Mermaid chart (renders on the GitHub website)</summary>
+
+```mermaid
+flowchart TB
+  subgraph HOST["Laptop — Windows 11 Home, 16 GB (HOST)"]
+    subgraph VB["VirtualBox — VM WinServer2025 in C:\\VMs · 6 GB · 4 CPUs · nested VT-x on · paravirt None"]
+      subgraph HV["HYPERVLAB — Windows Server 2025 + Hyper-V role · 10.20.20.1"]
+        EXT["lab-external (External switch)<br/>VirtualBox NAT → internet"]
+        INT["lab-internal (Internal switch)<br/>10.20.20.0/24"]
+        PRV["lab-private (Private switch)<br/>VMs only · Test C"]
+        C1["WS-CORE01 · 10.20.20.20<br/>Server Core · Gen 2 · 40 GB<br/>DC + DNS for lab.local"]
+        C2["WS-CORE02 · 10.20.20.30<br/>Server Core clone from template<br/>member server, Servers OU"]
+        U1["UBU01 · 10.20.20.10<br/>Ubuntu Server · 1.5 GB · 20 GB"]
+        INT --- C1
+        INT --- C2
+        INT --- U1
+      end
+    end
+  end
+  style INT fill:#dff3e3,stroke:#2e8b57
+  style EXT fill:#fff6d6,stroke:#d4a106
+  style PRV fill:#fbe0e2,stroke:#c0484f
+```
+
+</details>
+
 Only `lab-internal` carries day-to-day traffic. `lab-external` exists for internet access during builds, and `lab-private` is only used to demonstrate full isolation. Because HYPERVLAB has 6 GB, memory is tight: UBU01 runs alone, and once the domain exists (Part 12 onwards) WS-CORE01 at 1280 MB plus WS-CORE02 at 768 MB is the most that fits.
 
 **Where things live**
